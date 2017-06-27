@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-type"/>
+    <meta content="width=device-width,user-scalable=0,initial-scale=1,maximum-scale=1" name="viewport">
+    <title>Tunnel Aniamtion </title>
+    <link rel="stylesheet" href="./static/css/style.css"/>
+</head>
+<body>
+<canvas id="myCanvas"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script type="text/javascript">
+// 渲染器
+var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas')
+})
+renderer.setClearColor('#000')
+// 场景
+var scene = new THREE.Scene();
+// 相机
+//var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 1000)
+var camera = new THREE.OrthographicCamera(-2, 2, 2, -2, 1, 10)
+camera.position.set(3, -4, 5)
+camera.lookAt(new THREE.Vector3(0, 0, 0))
+scene.add(camera)
+// 物体
+var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), 
+    new THREE.MeshBasicMaterial({
+        color: 0xff0000,
+        wireframe: true
+    })
+)
+scene.add(cube)
+
+renderer.render(scene, camera)
+</script>
+</body>
+</html>
