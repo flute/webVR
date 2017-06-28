@@ -8,30 +8,172 @@
 </head>
 <body>
 <canvas id="myCanvas"></canvas>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="./static/js/three.min.js"></script>
 <script type="text/javascript">
+var ww = window.innerWidth,
+    wh = window.innerHeight;
 // 渲染器
 var renderer = new THREE.WebGLRenderer({
     canvas: document.getElementById('myCanvas')
 })
 renderer.setClearColor('#000')
+renderer.setSize(ww, wh);
 // 场景
 var scene = new THREE.Scene();
 // 相机
-//var camera = new THREE.PerspectiveCamera(45, 4/3, 1, 1000)
-var camera = new THREE.OrthographicCamera(-2, 2, 2, -2, 1, 10)
-camera.position.set(3, -4, 5)
-camera.lookAt(new THREE.Vector3(0, 0, 0))
+var camera = new THREE.PerspectiveCamera(45, 40/30, 1, 20)
+//camera.position.set(1,0,-5)
+//camera.lookAt(new THREE.Vector3(0,0,0))
+camera.position.set(3,2,10)
+/*var camera = new THREE.OrthographicCamera(-20, 20, 20, -20, 5, 30)
+camera.position.set(15, 15, 2)
+camera.lookAt(new THREE.Vector3(0, 0, 0))*/
 scene.add(camera)
-// 物体
-var cube = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), 
+/**
+ * cube
+ * THREE.CubeGeometry(width, height, depth, widthSegments, heightSegments, depthSegments)
+ */
+var cube = new THREE.Mesh(
+    new THREE.CubeGeometry(1, 2, 3, 2, 2, 3), 
     new THREE.MeshBasicMaterial({
         color: 0xff0000,
+        wireframe: true,
+        opacity: 0.75
+    })
+)
+/**
+ * plane
+ * THREE.PlaneGeometry(width, height, widthSegments, heightSegments)
+ */
+var plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(1, 2, 1, 1),
+    new THREE.MeshBasicMaterial({
+        color: 'green',
         wireframe: true
     })
 )
-scene.add(cube)
+/**
+ * sphere
+ * THREE.SphereGeometry(radius, segmentsWidth, segmentsHeight, phiStart, phiLength, thetaStart, thetaLength)
+ */
+var sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 12, 8, 0, Math.PI*2, 0, Math.PI/3),
+    new THREE.MeshBasicMaterial({
+        color: 'yellow',
+        wireframe: true
+    })
+)
+/**
+ * circle
+ * THREE.CircleGeometry(radius, segments, thetaStart, thetaLength)
+ */
+var circle = new THREE.Mesh(
+    new THREE.CircleGeometry(1, 10, Math.PI/6, Math.PI/3),
+    new THREE.MeshBasicMaterial({
+        color: 'blue',
+        wireframe: true
+    })
+)
+/**
+ * cylinder
+ * THREE.CylinderGeometry(radiusTop, radiusBottom, height, radiusSegments, heightSegments, openEnded)
+ */
+var cylinder = new THREE.Mesh(
+    new THREE.CylinderGeometry(1, 1.5, 2, 20, 5, true),
+    new THREE.MeshBasicMaterial({
+        color: 'white',
+        wireframe: true
+    })
+)
+/**
+ * TetrahedronGeometry(radius, detail) 正四面体
+ * OctahedronGeometry  正八面体
+ * IcosahedronGeometry 正十二面体
+ */
+var mesh = new THREE.Mesh(
+    new THREE.TetrahedronGeometry(1),
+    new THREE.MeshBasicMaterial({
+        color: '#ccc',
+        wireframe: true
+    })
+)
+/**
+ * TorusGeometry 圆环面-甜甜圈
+ * THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments, arc)
+ */
+var torus = new THREE.Mesh(
+    new THREE.TorusGeometry(1, 0.1, 5, 20, Math.PI/4*3),
+    new THREE.MeshBasicMaterial({
+        color: '#e53',
+        wireframe: true
+    })
+)
+/**
+ * torusknot
+ * THREE.TorusKnotGeometry(radius, tube, radialSegments, tubularSegments, p, q, heightScale)
+ */
+var torusknot = new THREE.Mesh(
+    new THREE.TorusKnotGeometry(1, 0.2, 5, 20),
+    new THREE.MeshBasicMaterial({
+        color: '#c08',
+        wireframe: true,
+        opacity: 0.75
+    })
+)
+/**
+ * text
+ * THREE.TextGeometry(text, parameters)
+ */
+var loader = new THREE.FontLoader();
+loader.load( './static/fonts/helvetiker_regular.typeface.json', function ( font ) { 
+    var text = new THREE.Mesh(
+        new THREE.TextGeometry('Ludis', {
+            font: font, 
+            size: 1, 
+            height: 1,
+            /*curveSegments: 50, // 弧线分段数
+            bevelEnabled: true, // 倒角
+            bevelThickness: 0.1, // 倒角厚度
+            bevelSize: 0.1, // 倒角宽度
+            bevelSegments: 1 // 倒角分段数*/
+        }),
+        new THREE.MeshBasicMaterial({
+            color: '#c49502',
+            //opacity: 0.9
+            wireframe: true
+        })
+    )
+    //scene.add(text)
+    //renderer.render(scene, camera)
+});
 
+/////////////////////////////////////////////////   Material   /////////////////////////////////////////////////////
+/**
+ * lambert
+ */
+var lambert = new THREE.Mesh(
+    new THREE.CubeGeometry(1,2,3),
+    new THREE.MeshLambertMaterial({
+        color: 0xffff00,
+        emissive: 0xff0000
+    })
+)
+/**
+ * phong
+ */
+//var material = new THREE.MeshPhongMaterial({    specular: 0xff0000});
+//var sphere = new THREE.Mesh(new THREE.SphereGeometry(3, 20, 8), material); 
+var phong = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 30, 20),
+    new THREE.MeshPhongMaterial({
+        color: 'green',
+        emissive: 'yellow',
+        specular: 0xff0000,
+        shininess: 1000
+        //wireframe: true
+    })
+)
+scene.add(phong)
 renderer.render(scene, camera)
 </script>
 </body>
